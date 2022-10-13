@@ -1,0 +1,7 @@
+Flask>=1,<2
+werkzeug>=1,<2
+authlib
+flask-session #~=0.3.2
+requests #>=2,<3
+# msal>=1.7,<2
+markupsafe==2.0.1  # Later ingelezen na fout opstarten app. EAA
