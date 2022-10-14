@@ -4,12 +4,10 @@ from dotenv import load_dotenv
 ### Azure App reg voor: python-auth-code-02
 load_dotenv(".env")
 
-# Secrets
-# AAD_CLIENT_SECRET = "VHe8Q~rZbjvskPJe9T34rCvqvO5BokhpCOrwFaPl" # Placeholder - for use ONLY during testing.
+# App Secrets
 AAD_CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
 if not AAD_CLIENT_SECRET:
     raise ValueError("CLIENT_SECRET is niet gedefinieerd!")
-# AAD_CLIENT_SECRET = "rjd8Q~VJTvq447goXnj7IBLEPgyjTlp7XwbjkcDz" # Placeholder - for use ONLY during testing.
 
 AAD_CLIENT_ID     = "73de801a-937d-4ee3-ba3e-dec460e1428b"     # Application (client) ID of app registration
 AAD_TENANT_ID     = "121d18b6-96bd-4da0-9bb8-845d80a1ec21"
