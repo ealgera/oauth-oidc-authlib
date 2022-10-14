@@ -28,18 +28,20 @@
     <table>
         <th style="text-align:left">Item</th>
         <th style="text-align:left">Waarde</th>
-        {% for k, v in session_info.items() %}
-            {% if k == "flow" %}
-                <th style="text-align:left">Flow</th>
-                <th style="text-align:left">Item</th>
+        {% for k, v in auth_info.items() %}
+            {% if k == "headers" %}
+                <tr>
+                    <td>headers</td>
+                    <td>Item</td>
+                </tr>
                 <tr>
                     <td></td>
                     <td>
                         <table>
                             <th style="text-align:left">-</th>
-                            <th style="text-align:left">Flow Waarde</th>
+                            <th style="text-align:left">Headers Waarde</th>
                             <tr></tr>
-                            {% for kf, vf in session_info["flow"].items() %}
+                            {% for kf, vf in auth_info["headers"].items() %}
                                 <tr>
                                     <td>{{kf}}</td><td>{{vf}}</td>
                                 </tr>

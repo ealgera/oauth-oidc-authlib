@@ -33,24 +33,24 @@
         </tr>
     </table>
 
-    <p>Session gegevens:</p>
+    <p>Token gegevens:</p>
     <table>
         <th style="text-align:left">Item</th>
         <th style="text-align:left">Waarde</th>
-        {% for k, v in my_session.items() %}
-            {% if k == "flow" %}
+        {% for k, v in user.items() %}
+            {% if k == "userinfo" %}
                 <tr>
-                    <td>Flow</td>
-                    <td>-</td>
+                    <td>userinfo</td>
+                    <td>Item</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>
                         <table>
-                            <th style="text-align:left">Item</th>
-                            <th style="text-align:left">Waarde</th>
+                            <th style="text-align:left">-</th>
+                            <th style="text-align:left">Userinfo Waarde</th>
                             <tr></tr>
-                            {% for kf, vf in my_session["flow"].items() %}
+                            {% for kf, vf in user["userinfo"].items() %}
                                 <tr>
                                     <td>{{kf}}</td><td>{{vf}}</td>
                                 </tr>
@@ -59,36 +59,14 @@
                     </td>
                 </tr>
             {% else %}
-                {% if k == "user" %}
-                    <tr>
-                        <td>User</td>
-                        <td>-</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <table>
-                                <th style="text-align:left">Item</th>
-                                <th style="text-align:left">Waarde</th>
-                                <tr></tr>
-                                {% for kf, vf in my_session["user"].items() %}
-                                    <tr>
-                                        <td>{{kf}}</td><td>{{vf}}</td>
-                                    </tr>
-                                {% endfor %}
-                            </table>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td>{{k}}</td><td>{{v}}</td>
-                    </tr>
-                {% endif %}
+                <tr>
+                    <td>{{k}}</td><td>{{v}}</td>
+                </tr>
             {% endif %}
         {% endfor %}
     </table>
 
-    <footer style="text-align: right">Powered by MSAL Python {{ version }}</footer>
+    <footer style="text-align: right">Powered by Authlib</footer>
 </body>
 </html>
 
