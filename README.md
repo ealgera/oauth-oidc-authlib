@@ -26,4 +26,4 @@ I deactivated this function (commented) because Microsoft does not comply to the
 If you clone this code you should also 'patch' this code if you get an error like InvalidClaimError, invalid_claim: Invalid claim "iss".
 (code in venv/lib/python<#>/site-packages/authlib/jose/rfc7519/claims.py)
 The problem is that Microsoft shows the 'issuer' (iss) as: "https://login.microsoftonline.com/{tenantid}/v2.0" in '.well-known/openid-configuration'.
-The claim will be compared against "https://login.microsoftonline.com/<real tenant-id>/v2.0" and willl fail.
+The claim will be compared against "https://login.microsoftonline.com/[real tenant-id]/v2.0" and willl fail.
