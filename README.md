@@ -22,7 +22,14 @@ Conform the Authlib library and Python (3.x).
 
 ### !! Important !!
 I've changed the code in /authlib/jose/rfc7519/claims.py, function _validate_claim_value.
-I deactivated this function (commented) because Microsoft does not comply to the OIDC RFC, so there is no claim validation!
+I deactivated part of this function (commented) because Microsoft does not comply to the OIDC RFC, so there is no claim validation!
+
+# start commented part:
+# option_values = option.get('values')
+# if option_values and value not in option_values:
+#     raise InvalidClaimError(claim_name)
+# end commented part
+
 If you clone this code you should also 'patch' this code if you get an error like InvalidClaimError, invalid_claim: Invalid claim "iss".
 (code in venv/lib/python<#>/site-packages/authlib/jose/rfc7519/claims.py)
 The problem is that Microsoft shows the 'issuer' (iss) as: "https://login.microsoftonline.com/{tenantid}/v2.0" in '.well-known/openid-configuration'.

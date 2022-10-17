@@ -1,9 +1,11 @@
+from datetime import datetime
 import json
 import requests
 from flask import Flask, redirect, url_for, render_template, session, request
 from flask_session import Session # # Voor server-side Session. Session wordt niet direct gebruikt maar via flask.session
 from authlib.integrations.flask_client import OAuth
 from urllib.parse import urlparse, parse_qs
+from datetime import datetime
 
 import app_config
 
@@ -35,6 +37,10 @@ def index():
 
         return redirect(url_for("login"))
 
+    dt = datetime.fromtimestamp(session["tokens"]["userinfo"]["exp"])
+    dt_s = dt.strftime("%Y-%m-%d - %H:%M:%S:%f")
+    print(f"[info] <Index> ...")
+    print(f"[info] <Index> Expiration: {dt_s}")
     return render_template(
         "index.html",
         user=session["tokens"],
