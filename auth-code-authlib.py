@@ -3,6 +3,7 @@ import requests
 from flask import Flask, redirect, url_for, render_template, session, request
 from flask_session import Session # # Voor server-side Session. Session wordt niet direct gebruikt maar via flask.session
 from authlib.integrations.flask_client import OAuth
+from urllib.parse import urlparse, parse_qs
 
 import app_config
 
@@ -46,16 +47,19 @@ def index():
 def login():
     '''
     '''
+    print(f"[info] <Login> ...")
     azure_ad = client.create_client("azure_ad")
-    # print(f"[info] <login> AZURE_AD Client: {type(azure_ad)}")
-    
-    # for k, v in vars(azure_ad).items():
-    #     print(f"[info] <login> {k}: {v}")
+    print(f"[info] <Login> Client:")
+    print(f"[info] <Login> {azure_ad}, {type(azure_ad)}")
 
     redirect_uri = "http://localhost:5000" + app_config.REDIRECT_PATH  # url_for(app_config.REDIRECT_PATH)
 
-    auth_uri = azure_ad.authorize_redirect(redirect_uri)
-    auth_url = vars(auth_uri).get('headers').get('Location')
+    auth_uri  = azure_ad.authorize_redirect(redirect_uri)
+ 
+    auth_url  = vars(auth_uri).get('headers').get('Location')
+    auth_args = urlparse(auth_url)
+    # parse_qs: Dict met: {'response_type': [], 'client_id': [], 'redirect_uri': [], 'scope': [], 'state': [], 'nonce': []}
+    session["auth_code_params"] = parse_qs(auth_args.query, keep_blank_values=True)
 
     # return azure_ad.authorize_redirect(redirect_uri)
 
@@ -85,20 +89,41 @@ def authorized():
     Deze vergelijking klopt niet en er volgt een InvalidClaimError, invalid_claim: Invalid claim "iss"
     '''
     print(f"[info] <Authorized> ...")
+    
+    # We get an authorization code (code) and state value back (in the request from the redirect)
+    args = request.args
+    session["auth_code"]  = args.get('code')  # Authorization code from login-server
+    session["state_back"] = args.get('state') # State value from login-server
 
     try:
+        # Now we can try to get access / id tokens with the authorization code
         token = client.azure_ad.authorize_access_token()
-        session["tokens"] = token
+        session["tokens"] = token # Save tokens in session
+        # for token_key, token_value in token.items():
+            # print(f"[info] -- item {token_key} : {token_value}")
     except Exception as e:
-        print(f"\n *** FOUT ***")
+        print(f"\n *** ERROR ***")
         print(e)
         print()
 
-    for token_key, token_value in token.items():
-        print(f"[info] -- item {token_key} : {token_value}")
-
     # return redirect(url_for("logout"))
     return redirect(url_for("index"))
+
+@app.route("/graphcall")
+def graphcall():
+    print(f"[info] <graphcall> ...")
+    headers = {"Authorization": "Bearer " + session["tokens"]["access_token"]}
+    print(f"[info] <graphcall> headers: {headers} ...\n")
+    graph_data = requests.get(
+        app_config.ENDPOINT,
+        headers=headers,
+    ).json()
+    return render_template("display.html", result=graph_data)
+
+@app.route("/show_tokens")
+def show_tokens():
+    print(f"[info] <show_tokens> ...")
+    return render_template("show_tokens.html", user=session["tokens"])
 
 if __name__ == "__main__":
     app.run()

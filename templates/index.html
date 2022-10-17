@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>Microsoft Identity Python Web App</h1>
-    <h2>Welcome {{ user.get("name") }}!</h2>
+    <h2>Welcome {{ user.get("userinfo").get("name") }}!</h2>
 
     {% if config.get("ENDPOINT") %}
       <li><a href='/graphcall'>Call Microsoft Graph API</a></li>
@@ -21,7 +21,7 @@
     <li><a href="/logout">Logout</a></li>
     <hr>
 
-    <p>Client gegevens:</p>
+    <p><b>Client gegevens:</b></p>
     <table>
         <tr>
             <td>Client ID</td>
@@ -33,7 +33,31 @@
         </tr>
     </table>
 
-    <p>Token gegevens:</p>
+    <p><b>Authorization code gegevens:</b></p>
+    <table>
+        <tr>
+            <td>Auth code:</td>
+            <td>{{ my_session["auth_code"] }}</td>
+        </tr>
+        <tr>
+            <td>State sent:</td>
+            <td>{{ my_session["auth_code_params"]["state"][0] }}</td>
+        </tr>
+        <tr>
+            <td>State return:</td>
+            <td>{{ my_session["state_back"] }}</td>
+        </tr>
+        <tr>
+            <td>Nonce sent:</td>
+            <td>{{ my_session["auth_code_params"]["nonce"][0] }}</td>
+        </tr>
+        <tr>
+            <td>Nonce return:</td>
+            <td>{{ user["userinfo"]["nonce"] }}</td>
+        </tr>
+    </table>
+
+    <p><b>Token gegevens:</b></p>
     <table>
         <th style="text-align:left">Item</th>
         <th style="text-align:left">Waarde</th>
